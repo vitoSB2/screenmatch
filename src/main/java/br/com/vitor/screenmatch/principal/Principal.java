@@ -1,13 +1,17 @@
 package br.com.vitor.screenmatch.principal;
 
+import br.com.vitor.screenmatch.model.DadosEpisodio;
 import br.com.vitor.screenmatch.model.DadosSerie;
 import br.com.vitor.screenmatch.model.DadosTemporada;
+import br.com.vitor.screenmatch.model.Episodio;
 import br.com.vitor.screenmatch.service.ConsumoApi;
 import br.com.vitor.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner leitura = new Scanner(System.in);
@@ -31,6 +35,13 @@ public class Principal {
 			DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
 			temporadas.add(dadosTemporada);
 		}
-		temporadas.forEach(t-> t.episodios().forEach(e -> System.out.println(e.titulo())));
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(e -> new Episodio(t.numero(), e)))
+                .collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
+
     }
 }
