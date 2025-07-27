@@ -7,10 +7,7 @@ import br.com.vitor.screenmatch.model.Episodio;
 import br.com.vitor.screenmatch.service.ConsumoApi;
 import br.com.vitor.screenmatch.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -43,5 +40,20 @@ public class Principal {
 
         episodios.forEach(System.out::println);
 
+        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getAvaliacao)
+                ));
+        System.out.println("Avaliações por temporada: "+ avaliacoesPorTemporada);
+
+        DoubleSummaryStatistics estatisticas = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println("Média de avaliações: " + estatisticas.getAverage());
+        System.out.println("Total de episódios: " + estatisticas.getCount());
+        System.out.println("Maior avaliação: " + estatisticas.getMax());
+        System.out.println("Menor avaliação: " + estatisticas.getMin());
     }
 }
