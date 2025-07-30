@@ -1,4 +1,4 @@
-package br.com.vitor.screenmatch.model;
+package br.com.alura.screenmatch.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -14,14 +14,16 @@ public class Episodio {
         this.temporada = numeroTemporada;
         this.titulo = dadosEpisodio.titulo();
         this.numeroEpisodio = dadosEpisodio.numero();
-        try{
+
+        try {
             this.avaliacao = Double.valueOf(dadosEpisodio.avaliacao());
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ex) {
             this.avaliacao = 0.0;
         }
-        try{
+
+        try {
             this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
-        }catch (DateTimeParseException e) {
+        } catch (DateTimeParseException ex) {
             this.dataLancamento = null;
         }
     }
@@ -72,6 +74,6 @@ public class Episodio {
                 ", titulo='" + titulo + '\'' +
                 ", numeroEpisodio=" + numeroEpisodio +
                 ", avaliacao=" + avaliacao +
-                ", dataLancamento=" + dataLancamento;
+                ", dataLancamento=" + dataLancamento ;
     }
 }
