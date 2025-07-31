@@ -1,15 +1,29 @@
 package br.com.alura.screenmatch.model;
 
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "series")
 public class Serie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String titulo;
     private Integer totalTemporadas;
     private Double avaliacao;
     private String sinopse;
     private String atores;
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String poster;
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
@@ -20,6 +34,16 @@ public class Serie {
         this.poster = dadosSerie.poster();
         this.sinopse = dadosSerie.sinopse();
 
+    }
+
+    public Serie() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPoster() {
@@ -78,6 +102,15 @@ public class Serie {
         this.titulo = titulo;
     }
 
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
+    }
+
     @Override
     public String toString() {
         return
@@ -88,6 +121,6 @@ public class Serie {
                 ", sinopse='" + sinopse + '\'' +
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
-                '}';
+                ", episodios='" + episodios + '\'';
     }
 }
